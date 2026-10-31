@@ -1,0 +1,137 @@
+[
+  {
+    "case_id": "LIDC-IDRI-0984_0612476953",
+    "patient_id": "LIDC-IDRI-0984",
+    "manufacturer": "GE MEDICAL SYSTEMS",
+    "n_slices": 257,
+    "file": "preview/train-00003-of-00004.parquet",
+    "row_in_file": 225,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0888_5725735761",
+    "patient_id": "LIDC-IDRI-0888",
+    "manufacturer": "Philips",
+    "n_slices": 270,
+    "file": "preview/train-00003-of-00004.parquet",
+    "row_in_file": 129,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0304_9840828684",
+    "patient_id": "LIDC-IDRI-0304",
+    "manufacturer": "SIEMENS",
+    "n_slices": 206,
+    "file": "preview/train-00001-of-00004.parquet",
+    "row_in_file": 49,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0980_1156820813",
+    "patient_id": "LIDC-IDRI-0980",
+    "manufacturer": "TOSHIBA",
+    "n_slices": 104,
+    "file": "preview/train-00003-of-00004.parquet",
+    "row_in_file": 221,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0139_9960724156",
+    "patient_id": "LIDC-IDRI-0139",
+    "manufacturer": "GE MEDICAL SYSTEMS",
+    "n_slices": 114,
+    "file": "preview/train-00000-of-00004.parquet",
+    "row_in_file": 139,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0412_1686508169",
+    "patient_id": "LIDC-IDRI-0412",
+    "manufacturer": "Philips",
+    "n_slices": 276,
+    "file": "preview/train-00001-of-00004.parquet",
+    "row_in_file": 161,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0864_7154875981",
+    "patient_id": "LIDC-IDRI-0864",
+    "manufacturer": "SIEMENS",
+    "n_slices": 219,
+    "file": "preview/train-00003-of-00004.parquet",
+    "row_in_file": 105,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0983_3180126785",
+    "patient_id": "LIDC-IDRI-0983",
+    "manufacturer": "TOSHIBA",
+    "n_slices": 90,
+    "file": "preview/train-00003-of-00004.parquet",
+    "row_in_file": 224,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0026_7858840086",
+    "patient_id": "LIDC-IDRI-0026",
+    "manufacturer": "GE MEDICAL SYSTEMS",
+    "n_slices": 257,
+    "file": "preview/train-00000-of-00004.parquet",
+    "row_in_file": 25,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0601_9828256685",
+    "patient_id": "LIDC-IDRI-0601",
+    "manufacturer": "Philips",
+    "n_slices": 286,
+    "file": "preview/train-00002-of-00004.parquet",
+    "row_in_file": 96,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0646_0902714604",
+    "patient_id": "LIDC-IDRI-0646",
+    "manufacturer": "SIEMENS",
+    "n_slices": 461,
+    "file": "preview/train-00002-of-00004.parquet",
+    "row_in_file": 141,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0421_0308327406",
+    "patient_id": "LIDC-IDRI-0421",
+    "manufacturer": "TOSHIBA",
+    "n_slices": 115,
+    "file": "preview/train-00001-of-00004.parquet",
+    "row_in_file": 170,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0336_7896167830",
+    "patient_id": "LIDC-IDRI-0336",
+    "manufacturer": "GE MEDICAL SYSTEMS",
+    "n_slices": 129,
+    "file": "preview/train-00001-of-00004.parquet",
+    "row_in_file": 83,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0617_5613114069",
+    "patient_id": "LIDC-IDRI-0617",
+    "manufacturer": "Philips",
+    "n_slices": 320,
+    "file": "preview/train-00002-of-00004.parquet",
+    "row_in_file": 112,
+    "split": "train"
+  },
+  {
+    "case_id": "LIDC-IDRI-0351_9001532111",
+    "patient_id": "LIDC-IDRI-0351",
+    "manufacturer": "SIEMENS",
+    "n_slices": 103,
+    "file": "preview/train-00001-of-00004.parquet",
+    "row_in_file": 98,
+    "split": "train"
+  }
+]

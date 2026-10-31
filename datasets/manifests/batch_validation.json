@@ -1,0 +1,182 @@
+[
+  {
+    "case_id": "LIDC-IDRI-0001_9720603192",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      133
+    ],
+    "mask_voxels": 5428
+  },
+  {
+    "case_id": "LIDC-IDRI-0139_9960724156",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      114
+    ],
+    "mask_voxels": 10202
+  },
+  {
+    "case_id": "LIDC-IDRI-0304_9840828684",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      206
+    ],
+    "mask_voxels": 896
+  },
+  {
+    "case_id": "LIDC-IDRI-0351_9001532111",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      103
+    ],
+    "mask_voxels": 158
+  },
+  {
+    "case_id": "LIDC-IDRI-0412_1686508169",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      276
+    ],
+    "mask_voxels": 90
+  },
+  {
+    "case_id": "LIDC-IDRI-0421_0308327406",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      115
+    ],
+    "mask_voxels": 3209
+  },
+  {
+    "case_id": "LIDC-IDRI-0601_9828256685",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      286
+    ],
+    "mask_voxels": 4583
+  },
+  {
+    "case_id": "LIDC-IDRI-0617_5613114069",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      320
+    ],
+    "mask_voxels": 2262
+  },
+  {
+    "case_id": "LIDC-IDRI-0980_1156820813",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      104
+    ],
+    "mask_voxels": 712
+  },
+  {
+    "case_id": "LIDC-IDRI-0984_0612476953",
+    "status": "PASS",
+    "checks": {
+      "3d": true,
+      "shape_match": true,
+      "affine_match": true,
+      "finite_image": true,
+      "binary_mask": true,
+      "nonempty_mask": true
+    },
+    "shape": [
+      512,
+      512,
+      257
+    ],
+    "mask_voxels": 152
+  }
+]

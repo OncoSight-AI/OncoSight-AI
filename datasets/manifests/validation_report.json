@@ -1,0 +1,213 @@
+{
+  "nifti_3d": {
+    "generated": "2026-10-31T11:54:53",
+    "synthetic_self_test": false,
+    "repo_id": "MedOtter/LIDC-IDRI",
+    "case_id": "LIDC-IDRI-0001_9720603192",
+    "overall": "PASS",
+    "checks": [
+      {
+        "check": "Load NIfTI",
+        "status": "PASS",
+        "detail": "LIDC-IDRI-0001_9720603192.nii.gz, LIDC-IDRI-0001_9720603192.nii.gz"
+      },
+      {
+        "check": "3D volumes",
+        "status": "PASS",
+        "detail": "image (512, 512, 133), mask (512, 512, 133)"
+      },
+      {
+        "check": "Shape match",
+        "status": "PASS",
+        "detail": "(512, 512, 133)"
+      },
+      {
+        "check": "Affine match",
+        "status": "PASS",
+        "detail": "max |image-mask| affine difference = 0.00e+00"
+      },
+      {
+        "check": "Voxel spacing",
+        "status": "PASS",
+        "detail": "[0.7031, 0.7031, 2.5] mm (image == mask)"
+      },
+      {
+        "check": "Orientation",
+        "status": "PASS",
+        "detail": "axis codes LPS (image == mask), as stored"
+      },
+      {
+        "check": "Spatial transform codes",
+        "status": "PASS",
+        "detail": "qform_code=1, sform_code=1"
+      },
+      {
+        "check": "Image dtype",
+        "status": "PASS",
+        "detail": "on-disk dtype int16 (README says int16 HU)"
+      },
+      {
+        "check": "Mask dtype",
+        "status": "PASS",
+        "detail": "on-disk dtype uint8 (README says uint8)"
+      },
+      {
+        "check": "Intensity scaling",
+        "status": "PASS",
+        "detail": "no slope/intercept rescaling"
+      },
+      {
+        "check": "Image finite values",
+        "status": "PASS",
+        "detail": "no NaN/Inf"
+      },
+      {
+        "check": "Image HU range",
+        "status": "PASS",
+        "detail": "min -2048, max 3071, p1/median/p99 = -2048/-933/420"
+      },
+      {
+        "check": "Mask labels",
+        "status": "PASS",
+        "detail": "unique values [0, 1]"
+      },
+      {
+        "check": "Mask foreground",
+        "status": "PASS",
+        "detail": "5428 voxels = 6.71 mL, 0.0156% of volume"
+      },
+      {
+        "check": "Mask components",
+        "status": "PASS",
+        "detail": "1 connected component(s); largest = 6708.8 mm3"
+      },
+      {
+        "check": "HU inside mask",
+        "status": "PASS",
+        "detail": "median 24 HU, 0.0% air-like voxels (nodule-like tissue)"
+      },
+      {
+        "check": "PNG cross-check",
+        "status": "PASS",
+        "detail": "streamed slice_index=89/133 best matches NIfTI slice 89 (rot90 k=3, fliplr=True): mask Dice=1.000, image Pearson r=0.997; PNG mask values=[0, 255]"
+      }
+    ],
+    "geometry": {
+      "image_shape": [
+        512,
+        512,
+        133
+      ],
+      "mask_shape": [
+        512,
+        512,
+        133
+      ],
+      "image_affine": [
+        [
+          -0.703125,
+          0.0,
+          0.0,
+          166.0
+        ],
+        [
+          0.0,
+          -0.703125,
+          0.0,
+          171.6999969482422
+        ],
+        [
+          0.0,
+          0.0,
+          2.5,
+          -340.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "mask_affine": [
+        [
+          -0.703125,
+          0.0,
+          0.0,
+          166.0
+        ],
+        [
+          0.0,
+          -0.703125,
+          0.0,
+          171.6999969482422
+        ],
+        [
+          0.0,
+          0.0,
+          2.5,
+          -340.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "image_zooms_mm": [
+        0.703125,
+        0.703125,
+        2.5
+      ],
+      "mask_zooms_mm": [
+        0.703125,
+        0.703125,
+        2.5
+      ],
+      "image_orientation": "LPS",
+      "mask_orientation": "LPS",
+      "image_qform_code": 1,
+      "image_sform_code": 1,
+      "image_dtype_on_disk": "int16",
+      "mask_dtype_on_disk": "uint8",
+      "image_hu": {
+        "min": -2048.0,
+        "max": 3071.0,
+        "p1": -2048.0,
+        "median": -933.0,
+        "p99": 420.0
+      },
+      "mask_unique_values": [
+        0.0,
+        1.0
+      ],
+      "mask_foreground_voxels": 5428,
+      "voxel_volume_mm3": 1.2359619140625,
+      "mask_foreground_fraction": 0.0001556855395324248,
+      "mask_components": {
+        "count_6conn": 1,
+        "largest": [
+          {
+            "voxels": 5428,
+            "volume_mm3": 6708.80126953125
+          }
+        ]
+      },
+      "hu_inside_mask": {
+        "median": 24.0,
+        "fraction_below_-900": 0.0
+      },
+      "z_axis_from_affine": 2
+    },
+    "png_crosscheck": {
+      "dice": 1.0,
+      "slice_index_used": 89,
+      "rot90_k": 3,
+      "fliplr": true,
+      "image_corr": 0.9967362226696139
+    },
+    "figure": "datasets\\validation\\LIDC-IDRI-0001_9720603192_overview.png",
+    "scope": "ONE case only; says nothing about the other scans"
+  }
+}

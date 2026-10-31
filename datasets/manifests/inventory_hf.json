@@ -1,0 +1,203 @@
+{
+  "generated": "2026-10-31T10:27:41",
+  "source": "MedOtter/LIDC-IDRI",
+  "n_files": 10945,
+  "total_gb": 71.03,
+  "n_parquet": 4,
+  "n_rows": 1018,
+  "columns": [
+    [
+      "case_id",
+      "string"
+    ],
+    [
+      "patient_id",
+      "string"
+    ],
+    [
+      "series_uid",
+      "string"
+    ],
+    [
+      "slice_index",
+      "int32"
+    ],
+    [
+      "n_slices",
+      "int32"
+    ],
+    [
+      "spacing_z",
+      "float"
+    ],
+    [
+      "manufacturer",
+      "string"
+    ],
+    [
+      "has_seg",
+      "bool"
+    ],
+    [
+      "n_nodules",
+      "int32"
+    ],
+    [
+      "n_nodules_default",
+      "int32"
+    ],
+    [
+      "n_annotations",
+      "int32"
+    ],
+    [
+      "in_luna16",
+      "bool"
+    ],
+    [
+      "luna16_subset",
+      "string"
+    ],
+    [
+      "in_qin_lungct_seg",
+      "bool"
+    ],
+    [
+      "image",
+      "struct<bytes: binary, path: string>"
+    ],
+    [
+      "mask",
+      "struct<bytes: binary, path: string>"
+    ],
+    [
+      "overlay",
+      "struct<bytes: binary, path: string>"
+    ]
+  ],
+  "meta_cols": [
+    "case_id",
+    "patient_id",
+    "series_uid",
+    "slice_index",
+    "n_slices",
+    "spacing_z",
+    "manufacturer",
+    "has_seg",
+    "n_nodules",
+    "n_nodules_default",
+    "n_annotations",
+    "in_luna16",
+    "luna16_subset",
+    "in_qin_lungct_seg"
+  ],
+  "heavy_cols": [
+    "image",
+    "mask",
+    "overlay"
+  ],
+  "n_unique_case": 1018,
+  "n_unique_patient": 1010,
+  "slices": {
+    "sum": 243955,
+    "min": 65.0,
+    "median": 203.5,
+    "max": 764.0,
+    "null_or_nonnumeric": 0,
+    "le_zero": 0
+  },
+  "peek": [
+    {
+      "file": "preview/train-00000-of-00004.parquet",
+      "fields": {
+        "case_id": {
+          "type": "str",
+          "value": "LIDC-IDRI-0001_9720603192"
+        },
+        "patient_id": {
+          "type": "str",
+          "value": "LIDC-IDRI-0001"
+        },
+        "series_uid": {
+          "type": "str",
+          "value": "1.3.6.1.4.1.14519.5.2.1.6279.6001.179049373636438705059720603192"
+        },
+        "slice_index": {
+          "type": "int",
+          "value": "89"
+        },
+        "n_slices": {
+          "type": "int",
+          "value": "133"
+        },
+        "spacing_z": {
+          "type": "float",
+          "value": "2.5"
+        },
+        "manufacturer": {
+          "type": "str",
+          "value": "GE MEDICAL SYSTEMS"
+        },
+        "has_seg": {
+          "type": "bool",
+          "value": "True"
+        },
+        "n_nodules": {
+          "type": "int",
+          "value": "1"
+        },
+        "n_nodules_default": {
+          "type": "int",
+          "value": "1"
+        },
+        "n_annotations": {
+          "type": "int",
+          "value": "4"
+        },
+        "in_luna16": {
+          "type": "bool",
+          "value": "True"
+        },
+        "luna16_subset": {
+          "type": "str",
+          "value": "subset1"
+        },
+        "in_qin_lungct_seg": {
+          "type": "bool",
+          "value": "False"
+        },
+        "image": {
+          "path": null,
+          "n_bytes": 108305,
+          "format": "PNG",
+          "size_wh": [
+            512,
+            512
+          ],
+          "mode": "L"
+        },
+        "mask": {
+          "path": null,
+          "n_bytes": 601,
+          "format": "PNG",
+          "size_wh": [
+            512,
+            512
+          ],
+          "mode": "L"
+        },
+        "overlay": {
+          "path": null,
+          "n_bytes": 184305,
+          "format": "PNG",
+          "size_wh": [
+            512,
+            512
+          ],
+          "mode": "RGB"
+        }
+      }
+    }
+  ],
+  "n_eligible_for_pilot": 1002
+}

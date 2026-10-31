@@ -1,0 +1,124 @@
+{
+  "seed": 42,
+  "requested_ratios": {
+    "train": 0.7,
+    "validation": 0.15,
+    "test": 0.15
+  },
+  "actual_counts": {
+    "train": 7,
+    "validation": 2,
+    "test": 1
+  },
+  "patient_ids": {
+    "train": [
+      "LIDC-IDRI-0421",
+      "LIDC-IDRI-0601",
+      "LIDC-IDRI-0001",
+      "LIDC-IDRI-0617",
+      "LIDC-IDRI-0351",
+      "LIDC-IDRI-0304",
+      "LIDC-IDRI-0412"
+    ],
+    "validation": [
+      "LIDC-IDRI-0984",
+      "LIDC-IDRI-0139"
+    ],
+    "test": [
+      "LIDC-IDRI-0980"
+    ]
+  },
+  "total_cases": 10,
+  "cases": [
+    {
+      "case_id": "LIDC-IDRI-0139_9960724156",
+      "patient_id": "LIDC-IDRI-0139",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.481278873893653517789960724156",
+      "split": "validation",
+      "positive_slice_count": 17,
+      "mask_voxels": 10202,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0139_9960724156.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0412_1686508169",
+      "patient_id": "LIDC-IDRI-0412",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.217754016294471278921686508169",
+      "split": "train",
+      "positive_slice_count": 4,
+      "mask_voxels": 90,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0412_1686508169.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0304_9840828684",
+      "patient_id": "LIDC-IDRI-0304",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.316911475886263032009840828684",
+      "split": "train",
+      "positive_slice_count": 7,
+      "mask_voxels": 896,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0304_9840828684.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0421_0308327406",
+      "patient_id": "LIDC-IDRI-0421",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.331136451298749863730308327406",
+      "split": "train",
+      "positive_slice_count": 13,
+      "mask_voxels": 3209,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0421_0308327406.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0984_0612476953",
+      "patient_id": "LIDC-IDRI-0984",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.126704785377921920210612476953",
+      "split": "validation",
+      "positive_slice_count": 5,
+      "mask_voxels": 152,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0984_0612476953.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0601_9828256685",
+      "patient_id": "LIDC-IDRI-0601",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.224465398054769500989828256685",
+      "split": "train",
+      "positive_slice_count": 32,
+      "mask_voxels": 4583,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0601_9828256685.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0351_9001532111",
+      "patient_id": "LIDC-IDRI-0351",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.236452051640243530449001532111",
+      "split": "train",
+      "positive_slice_count": 3,
+      "mask_voxels": 158,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0351_9001532111.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0980_1156820813",
+      "patient_id": "LIDC-IDRI-0980",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.230180665627287711381156820813",
+      "split": "test",
+      "positive_slice_count": 8,
+      "mask_voxels": 712,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0980_1156820813.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0001_9720603192",
+      "patient_id": "LIDC-IDRI-0001",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.179049373636438705059720603192",
+      "split": "train",
+      "positive_slice_count": 8,
+      "mask_voxels": 5428,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0001_9720603192.npz"
+    },
+    {
+      "case_id": "LIDC-IDRI-0617_5613114069",
+      "patient_id": "LIDC-IDRI-0617",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.188619674701053082195613114069",
+      "split": "train",
+      "positive_slice_count": 24,
+      "mask_voxels": 2262,
+      "volume": "datasets\\processed\\lung_ct\\LIDC-IDRI-0617_5613114069.npz"
+    }
+  ]
+}

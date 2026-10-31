@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# OncoSight AI - medical imaging datasets
+datasets/raw/
+datasets/processed/
