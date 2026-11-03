@@ -1,0 +1,427 @@
+{
+  "manifest": "datasets/manifests/cases_50.json",
+  "window": {
+    "low": -1000,
+    "high": 400
+  },
+  "total_cases": 50,
+  "processed_cases": 27,
+  "failed_cases": 23,
+  "overlay_count": 30,
+  "cases": [
+    {
+      "case_id": "LIDC-IDRI-0001_9720603192",
+      "patient_id": "LIDC-IDRI-0001",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.179049373636438705059720603192",
+      "positive_slice_count": 8,
+      "mask_voxels": 5428,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0001_9720603192.npz",
+      "n_slices": 133,
+      "slice_axis": 2,
+      "overlays_saved": 8
+    },
+    {
+      "case_id": "LIDC-IDRI-0412_1686508169",
+      "patient_id": "LIDC-IDRI-0412",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.217754016294471278921686508169",
+      "positive_slice_count": 4,
+      "mask_voxels": 90,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0412_1686508169.npz",
+      "n_slices": 276,
+      "slice_axis": 2,
+      "overlays_saved": 4
+    },
+    {
+      "case_id": "LIDC-IDRI-0304_9840828684",
+      "patient_id": "LIDC-IDRI-0304",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.316911475886263032009840828684",
+      "positive_slice_count": 7,
+      "mask_voxels": 896,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0304_9840828684.npz",
+      "n_slices": 206,
+      "slice_axis": 2,
+      "overlays_saved": 7
+    },
+    {
+      "case_id": "LIDC-IDRI-0421_0308327406",
+      "patient_id": "LIDC-IDRI-0421",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.331136451298749863730308327406",
+      "positive_slice_count": 13,
+      "mask_voxels": 3209,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0421_0308327406.npz",
+      "n_slices": 115,
+      "slice_axis": 2,
+      "overlays_saved": 11
+    },
+    {
+      "case_id": "LIDC-IDRI-0139_9960724156",
+      "patient_id": "LIDC-IDRI-0139",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.481278873893653517789960724156",
+      "positive_slice_count": 17,
+      "mask_voxels": 10202,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0139_9960724156.npz",
+      "n_slices": 114,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0601_9828256685",
+      "patient_id": "LIDC-IDRI-0601",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.224465398054769500989828256685",
+      "positive_slice_count": 32,
+      "mask_voxels": 4583,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0601_9828256685.npz",
+      "n_slices": 286,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0351_9001532111",
+      "patient_id": "LIDC-IDRI-0351",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.236452051640243530449001532111",
+      "positive_slice_count": 3,
+      "mask_voxels": 158,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0351_9001532111.npz",
+      "n_slices": 103,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0980_1156820813",
+      "patient_id": "LIDC-IDRI-0980",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.230180665627287711381156820813",
+      "positive_slice_count": 8,
+      "mask_voxels": 712,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0980_1156820813.npz",
+      "n_slices": 104,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0984_0612476953",
+      "patient_id": "LIDC-IDRI-0984",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.126704785377921920210612476953",
+      "positive_slice_count": 5,
+      "mask_voxels": 152,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0984_0612476953.npz",
+      "n_slices": 257,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0617_5613114069",
+      "patient_id": "LIDC-IDRI-0617",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.188619674701053082195613114069",
+      "positive_slice_count": 24,
+      "mask_voxels": 2262,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0617_5613114069.npz",
+      "n_slices": 320,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0066_6148200410",
+      "patient_id": "LIDC-IDRI-0066",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.430109407146633213496148200410",
+      "positive_slice_count": 50,
+      "mask_voxels": 6782,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0066_6148200410.npz",
+      "n_slices": 733,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0069_6154504249",
+      "patient_id": "LIDC-IDRI-0069",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.131939324905446238286154504249",
+      "positive_slice_count": 15,
+      "mask_voxels": 2150,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0069_6154504249.npz",
+      "n_slices": 136,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0003_3480003264",
+      "patient_id": "LIDC-IDRI-0003",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.170706757615202213033480003264",
+      "positive_slice_count": 13,
+      "mask_voxels": 4206,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0003_3480003264.npz",
+      "n_slices": 140,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0314_0013275227",
+      "patient_id": "LIDC-IDRI-0314",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.154677396354641150280013275227",
+      "positive_slice_count": 18,
+      "mask_voxels": 3398,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0314_0013275227.npz",
+      "n_slices": 275,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0094_9469324839",
+      "patient_id": "LIDC-IDRI-0094",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.143622857676008763729469324839",
+      "positive_slice_count": 24,
+      "mask_voxels": 6845,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0094_9469324839.npz",
+      "n_slices": 385,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0078_4852353824",
+      "patient_id": "LIDC-IDRI-0078",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.303494235102183795724852353824",
+      "positive_slice_count": 20,
+      "mask_voxels": 7290,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0078_4852353824.npz",
+      "n_slices": 87,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0004_2212458228",
+      "patient_id": "LIDC-IDRI-0004",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.323541312620128092852212458228",
+      "positive_slice_count": 4,
+      "mask_voxels": 73,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0004_2212458228.npz",
+      "n_slices": 241,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0325_8475581290",
+      "patient_id": "LIDC-IDRI-0325",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.725023183844147505748475581290",
+      "positive_slice_count": 27,
+      "mask_voxels": 4887,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0325_8475581290.npz",
+      "n_slices": 278,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0095_5286615668",
+      "patient_id": "LIDC-IDRI-0095",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.137773550852881583165286615668",
+      "positive_slice_count": 27,
+      "mask_voxels": 10541,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0095_5286615668.npz",
+      "n_slices": 343,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0079_5724605159",
+      "patient_id": "LIDC-IDRI-0079",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.213233719488315954975724605159",
+      "positive_slice_count": 5,
+      "mask_voxels": 853,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0079_5724605159.npz",
+      "n_slices": 113,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0005_7836686225",
+      "patient_id": "LIDC-IDRI-0005",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.129007566048223160327836686225",
+      "positive_slice_count": 5,
+      "mask_voxels": 210,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0005_7836686225.npz",
+      "n_slices": 133,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0335_4341475212",
+      "patient_id": "LIDC-IDRI-0335",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.315187221221054114974341475212",
+      "positive_slice_count": 8,
+      "mask_voxels": 153,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0335_4341475212.npz",
+      "n_slices": 300,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0098_7777745271",
+      "patient_id": "LIDC-IDRI-0098",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.286524966129599998397777745271",
+      "positive_slice_count": 3,
+      "mask_voxels": 472,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0098_7777745271.npz",
+      "n_slices": 104,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0084_4642979503",
+      "patient_id": "LIDC-IDRI-0084",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.288701997968615460794642979503",
+      "positive_slice_count": 6,
+      "mask_voxels": 269,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0084_4642979503.npz",
+      "n_slices": 166,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0006_7924920957",
+      "patient_id": "LIDC-IDRI-0006",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.132817748896065918417924920957",
+      "positive_slice_count": 3,
+      "mask_voxels": 163,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0006_7924920957.npz",
+      "n_slices": 133,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0338_6946096708",
+      "patient_id": "LIDC-IDRI-0338",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.199220738144407033276946096708",
+      "positive_slice_count": 5,
+      "mask_voxels": 132,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0338_6946096708.npz",
+      "n_slices": 285,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    },
+    {
+      "case_id": "LIDC-IDRI-0103_7310439568",
+      "patient_id": "LIDC-IDRI-0103",
+      "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.266485463235825902797310439568",
+      "positive_slice_count": 2,
+      "mask_voxels": 82,
+      "output": "datasets\\processed\\lung_ct_50\\LIDC-IDRI-0103_7310439568.npz",
+      "n_slices": 111,
+      "slice_axis": 2,
+      "overlays_saved": 0
+    }
+  ],
+  "failures": [
+    {
+      "case_id": "LIDC-IDRI-0104_2503408531",
+      "patient_id": "LIDC-IDRI-0104",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0007_8330857680",
+      "patient_id": "LIDC-IDRI-0007",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0352_2628818865",
+      "patient_id": "LIDC-IDRI-0352",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0110_8933873912",
+      "patient_id": "LIDC-IDRI-0110",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0106_7294720243",
+      "patient_id": "LIDC-IDRI-0106",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0008_2229821954",
+      "patient_id": "LIDC-IDRI-0008",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0398_7597754952",
+      "patient_id": "LIDC-IDRI-0398",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0119_3528682299",
+      "patient_id": "LIDC-IDRI-0119",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0107_0975844791",
+      "patient_id": "LIDC-IDRI-0107",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0010_2405866796",
+      "patient_id": "LIDC-IDRI-0010",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0404_5405000951",
+      "patient_id": "LIDC-IDRI-0404",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0130_1136624817",
+      "patient_id": "LIDC-IDRI-0130",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0115_7968137997",
+      "patient_id": "LIDC-IDRI-0115",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0011_6468423138",
+      "patient_id": "LIDC-IDRI-0011",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0405_9148051914",
+      "patient_id": "LIDC-IDRI-0405",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0132_6285662989",
+      "patient_id": "LIDC-IDRI-0132",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0117_7945391206",
+      "patient_id": "LIDC-IDRI-0117",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0012_3438457842",
+      "patient_id": "LIDC-IDRI-0012",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0409_6501469037",
+      "patient_id": "LIDC-IDRI-0409",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0120_3665729969",
+      "patient_id": "LIDC-IDRI-0120",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0013_2640380786",
+      "patient_id": "LIDC-IDRI-0013",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0433_2675655739",
+      "patient_id": "LIDC-IDRI-0433",
+      "error": "OSError: [Errno 28] No space left on device"
+    },
+    {
+      "case_id": "LIDC-IDRI-0136_2451006739",
+      "patient_id": "LIDC-IDRI-0136",
+      "error": "OSError: [Errno 28] No space left on device"
+    }
+  ]
+}

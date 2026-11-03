@@ -1,5 +1,6 @@
+
 #!/usr/bin/env python3
-"""Select a small LIDC-IDRI NIfTI pilot; dry-run does not download or modify files."""
+"""Select LIDC-IDRI NIfTI cases; dry-run does not download or modify files."""
 from __future__ import annotations
 
 import argparse
@@ -31,39 +32,72 @@ def read_existing(path: Path) -> list[dict]:
 def validate_pair(image_path: Path, mask_path: Path) -> tuple[bool, str]:
     if not image_path.is_file() or not mask_path.is_file():
         return False, "image or mask file missing"
+
     try:
         image_nii = nib.load(str(image_path))
         mask_nii = nib.load(str(mask_path))
+
         if image_nii.shape != mask_nii.shape:
             return False, f"shape mismatch: {image_nii.shape} vs {mask_nii.shape}"
+
         if not np.allclose(image_nii.affine, mask_nii.affine, atol=1e-4):
             return False, "affine mismatch"
+
         mask_values = np.unique(np.asanyarray(mask_nii.dataobj))
+
         if not np.isin(mask_values, [0, 1]).all():
             return False, f"mask not binary: {mask_values[:10].tolist()}"
+
         if not np.any(mask_values == 1):
             return False, "mask is empty"
+
         return True, "valid"
+
     except Exception as exc:
         return False, f"NIfTI validation error: {exc}"
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+
     parser.add_argument("--repo-root", type=Path, default=Path("."))
     parser.add_argument("--n-cases", type=int, default=10)
+
+    parser.add_argument(
+        "--output-manifest",
+        type=Path,
+        default=None,
+        help="Output manifest path relative to repo root.",
+    )
+
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--repo-id", default=DEFAULT_REPO)
     parser.add_argument("--revision", default="main")
+
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(levelname)s: %(message)s",
+    )
+
     if args.n_cases < 1:
         parser.error("--n-cases must be at least 1")
 
     root = args.repo_root.resolve()
+
     csv_path = root / "datasets" / "manifests" / "hf_metadata.csv"
+
+    # Original pilot manifest: used only to prioritize existing cases.
     pilot_path = root / "datasets" / "manifests" / "pilot_cases.json"
+
+    # New output manifest: defaults to the original path only if not supplied.
+    output_path = (
+        root / args.output_manifest
+        if args.output_manifest
+        else pilot_path
+    )
+
     image_dir = root / "datasets" / "raw" / "lidc_hf" / "images"
     mask_dir = root / "datasets" / "raw" / "lidc_hf" / "masks"
 
@@ -72,48 +106,81 @@ def main() -> int:
         return 2
 
     df = pd.read_csv(csv_path)
+
     required = {
-        "case_id", "patient_id", "series_uid", "manufacturer",
-        "has_seg", "n_nodules_default",
+        "case_id",
+        "patient_id",
+        "series_uid",
+        "manufacturer",
+        "has_seg",
+        "n_nodules_default",
     }
+
     missing = required.difference(df.columns)
+
     if missing:
-        LOG.error("Metadata CSV missing required columns: %s", sorted(missing))
+        LOG.error(
+            "Metadata CSV missing required columns: %s",
+            sorted(missing),
+        )
         return 2
 
     df["has_seg"] = (
-        df["has_seg"].astype(str).str.strip().str.lower()
+        df["has_seg"]
+        .astype(str)
+        .str.strip()
+        .str.lower()
         .isin({"true", "1", "yes"})
     )
+
     df["n_nodules_default"] = pd.to_numeric(
-        df["n_nodules_default"], errors="coerce"
+        df["n_nodules_default"],
+        errors="coerce",
     ).fillna(0)
 
     candidates = df.loc[
         df["has_seg"] & (df["n_nodules_default"] >= 1)
     ].copy()
+
     candidates = candidates.drop_duplicates(
-        subset=["patient_id", "series_uid"], keep="first"
+        subset=["patient_id", "series_uid"],
+        keep="first",
     )
 
+    # Prioritize the original 10 pilot cases.
     old_ids = {
-        item.get("case_id") for item in read_existing(pilot_path)
+        item.get("case_id")
+        for item in read_existing(pilot_path)
         if isinstance(item, dict) and item.get("case_id")
     }
-    candidates["_old_pilot_priority"] = candidates["case_id"].isin(old_ids).map(
-        {True: 0, False: 1}
+
+    candidates["_old_pilot_priority"] = (
+        candidates["case_id"]
+        .isin(old_ids)
+        .map({True: 0, False: 1})
     )
+
     candidates = candidates.sort_values(
         ["_old_pilot_priority", "patient_id", "case_id"]
     )
 
-    # Round-robin manufacturer groups to improve representation.
+    # Round-robin manufacturer groups.
     groups: dict[str, list[dict]] = {}
-    for manufacturer, group in candidates.groupby("manufacturer", dropna=False, sort=True):
-        label = "UNKNOWN" if pd.isna(manufacturer) else str(manufacturer)
+
+    for manufacturer, group in candidates.groupby(
+        "manufacturer",
+        dropna=False,
+        sort=True,
+    ):
+        label = (
+            "UNKNOWN"
+            if pd.isna(manufacturer)
+            else str(manufacturer)
+        )
         groups[label] = group.to_dict("records")
 
     ordered: list[dict] = []
+
     while any(groups.values()):
         for manufacturer in sorted(groups):
             if groups[manufacturer]:
@@ -122,27 +189,39 @@ def main() -> int:
     selected: list[dict] = []
     seen_patients: set[str] = set()
     seen_series: set[str] = set()
+
     for row in ordered:
         patient_id = str(row["patient_id"])
         series_uid = str(row["series_uid"])
+
         if patient_id in seen_patients or series_uid in seen_series:
             continue
+
         selected.append(row)
         seen_patients.add(patient_id)
         seen_series.add(series_uid)
+
         if len(selected) >= args.n_cases:
             break
 
     print(f"Metadata rows: {len(df)}", flush=True)
-    print(f"Eligible rows (has_seg and n_nodules_default >= 1): {len(candidates)}", flush=True)
+    print(
+        "Eligible rows (has_seg and n_nodules_default >= 1): "
+        f"{len(candidates)}",
+        flush=True,
+    )
     print(f"Selected unique patients/series: {len(selected)}", flush=True)
 
     output_records: list[dict] = []
+
     for index, row in enumerate(selected, start=1):
         case_id = str(row["case_id"])
+
         image_path = image_dir / f"{case_id}.nii.gz"
         mask_path = mask_dir / f"{case_id}.nii.gz"
+
         valid, reason = validate_pair(image_path, mask_path)
+
         record = {
             "case_id": case_id,
             "patient_id": str(row["patient_id"]),
@@ -150,7 +229,8 @@ def main() -> int:
             "manufacturer": str(row["manufacturer"]),
             "n_slices": (
                 int(row["n_slices"])
-                if "n_slices" in row and pd.notna(row["n_slices"]) else None
+                if "n_slices" in row and pd.notna(row["n_slices"])
+                else None
             ),
             "n_nodules_default": int(row["n_nodules_default"]),
             "image_path": str(image_path.relative_to(root)),
@@ -158,71 +238,117 @@ def main() -> int:
             "already_valid": valid,
             "validation": reason,
         }
+
         output_records.append(record)
+
         print(
-            f"{index:02d}. {case_id} | patient={record['patient_id']} | "
-            f"manufacturer={record['manufacturer']} | local_pair={reason}",
+            f"{index:02d}. {case_id} | "
+            f"patient={record['patient_id']} | "
+            f"manufacturer={record['manufacturer']} | "
+            f"local_pair={reason}",
             flush=True,
         )
 
     print(
-        f"Unique patients: {len({x['patient_id'] for x in output_records})}; "
-        f"unique series: {len({x['series_uid'] for x in output_records})}",
+        f"Unique patients: "
+        f"{len({x['patient_id'] for x in output_records})}; "
+        f"unique series: "
+        f"{len({x['series_uid'] for x in output_records})}",
         flush=True,
     )
 
     if args.dry_run:
-        print("DRY RUN complete: no downloads and no files changed.", flush=True)
+        print(
+            "DRY RUN complete: no downloads and no files changed.",
+            flush=True,
+        )
         return 0
 
     image_dir.mkdir(parents=True, exist_ok=True)
     mask_dir.mkdir(parents=True, exist_ok=True)
+
     validated_records: list[dict] = []
 
     for record in output_records:
         image_path = root / record["image_path"]
         mask_path = root / record["mask_path"]
+
         valid, _ = validate_pair(image_path, mask_path)
 
         if not valid:
-            for subfolder, target in (("images", image_path), ("masks", mask_path)):
-                # Download each missing/invalid member to a temporary file first.
+            for subfolder, target in (
+                ("images", image_path),
+                ("masks", mask_path),
+            ):
+                # Download missing or invalid files.
                 if target.is_file():
                     target.unlink()
-                remote_name = f"{subfolder}/{record['case_id']}.nii.gz"
+
+                remote_name = (
+                    f"{subfolder}/{record['case_id']}.nii.gz"
+                )
+
                 LOG.info("Downloading %s", remote_name)
-                cached_path = Path(hf_hub_download(
-                    repo_id=args.repo_id,
-                    repo_type="dataset",
-                    filename=remote_name,
-                    revision=args.revision,
-                ))
+
+                cached_path = Path(
+                    hf_hub_download(
+                        repo_id=args.repo_id,
+                        repo_type="dataset",
+                        filename=remote_name,
+                        revision=args.revision,
+                    )
+                )
+
                 target.parent.mkdir(parents=True, exist_ok=True)
-                temp_path = target.with_name(target.name + ".tmp")
+
+                temp_path = target.with_name(
+                    target.name + ".tmp"
+                )
+
                 shutil.copy2(cached_path, temp_path)
                 temp_path.replace(target)
 
         valid, reason = validate_pair(image_path, mask_path)
+
         if valid:
             record["already_valid"] = True
             record["validation"] = "valid"
             validated_records.append(record)
         else:
-            LOG.error("Case %s failed validation after download: %s",
-                      record["case_id"], reason)
+            LOG.error(
+                "Case %s failed validation after download: %s",
+                record["case_id"],
+                reason,
+            )
 
-    if pilot_path.exists():
-        backup = pilot_path.with_suffix(pilot_path.suffix + ".bak")
+    # Back up only the selected output manifest, never the original
+    # pilot manifest when a separate output path is supplied.
+    if output_path.exists():
+        backup = output_path.with_suffix(
+            output_path.suffix + ".bak"
+        )
+
         if not backup.exists():
-            shutil.copy2(pilot_path, backup)
+            shutil.copy2(output_path, backup)
             LOG.info("Backed up existing manifest to %s", backup)
 
-    pilot_path.parent.mkdir(parents=True, exist_ok=True)
-    pilot_path.write_text(
-        json.dumps(validated_records, indent=2), encoding="utf-8"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    output_path.write_text(
+        json.dumps(validated_records, indent=2),
+        encoding="utf-8",
     )
-    LOG.info("Validated %d of %d selected cases.", len(validated_records), len(output_records))
+
+    LOG.info("Saved manifest to %s", output_path)
+
+    LOG.info(
+        "Validated %d of %d selected cases.",
+        len(validated_records),
+        len(output_records),
+    )
+
+    return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(main())

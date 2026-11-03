@@ -1,0 +1,14 @@
+[
+  {
+    "case_id": "LIDC-IDRI-0352_2628818865",
+    "patient_id": "LIDC-IDRI-0352",
+    "series_uid": "1.3.6.1.4.1.14519.5.2.1.6279.6001.272042302501586336192628818865",
+    "manufacturer": "Philips",
+    "n_slices": 280,
+    "n_nodules_default": 1,
+    "image_path": "datasets\\raw\\lidc_hf\\images\\LIDC-IDRI-0352_2628818865.nii.gz",
+    "mask_path": "datasets\\raw\\lidc_hf\\masks\\LIDC-IDRI-0352_2628818865.nii.gz",
+    "already_valid": true,
+    "validation": "valid"
+  }
+]
