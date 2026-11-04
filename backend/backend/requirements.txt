@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+ultralytics==8.4.200
+opencv-python
+numpy
+nibabel
+pydicom
+SimpleITK
