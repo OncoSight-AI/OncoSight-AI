@@ -1,0 +1,53 @@
+export const demoStudies = [
+  {
+    id: "OS-1042",
+    name: "Sample chest CT",
+    modality: "CT",
+    model: "Lung nodule demo",
+    status: "Completed",
+    date: "2026-10-29",
+    confidence: 0.94,
+    finding: "Illustrative region flagged",
+    notes: "Synthetic demonstration record.",
+  },
+  {
+    id: "OS-1041",
+    name: "Sample brain MRI",
+    modality: "MRI",
+    model: "Research baseline",
+    status: "Review",
+    date: "2026-10-27",
+    confidence: 0.87,
+    finding: "Requires review",
+    notes: "Synthetic demonstration record.",
+  },
+  {
+    id: "OS-1040",
+    name: "Sample mammogram",
+    modality: "MG",
+    model: "Image classifier demo",
+    status: "Completed",
+    date: "2026-10-25",
+    confidence: 0.91,
+    finding: "Illustrative output",
+    notes: "Synthetic demonstration record.",
+  },
+  {
+    id: "OS-1039",
+    name: "Sample CT series",
+    modality: "CT",
+    model: "Lung nodule demo",
+    status: "Processing",
+    date: "2026-10-22",
+    confidence: null,
+    finding: "Analysis in progress",
+    notes: "Synthetic demonstration record.",
+  },
+];
+
+export const performanceData = [
+  { name: "Accuracy", value: 92 },
+  { name: "Precision", value: 89 },
+  { name: "Recall", value: 87 },
+  { name: "F1 score", value: 88 },
+];
