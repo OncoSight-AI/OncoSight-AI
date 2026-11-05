@@ -64,7 +64,7 @@ def main():
         source=[str(p) for p in selected],
         imgsz=512,
         conf=0.25,
-        device=0,
+        device="cpu",
         verbose=False,
         stream=False
     )

@@ -19,7 +19,7 @@ def main():
         epochs=50,
         imgsz=512,
         batch=2,
-        device=0,
+        device='cpu',
         workers=2,
         project=PROJECT,
         name="lung_nodule_yolov8n_seg",
