@@ -84,39 +84,45 @@ class UNetSegmentationService:
         print(f"U-Net loaded: {self.model_path}")
         print(f"Inference device: {self.device}")
 
-    def predict_batch(self, slices):
+        def predict_batch(self, slices):
         if len(slices) == 0:
             return []
 
-        original_shapes = [item.shape for item in slices]
-
-        batch = np.stack(slices).astype(np.float32, copy=False)
-        tensor = torch.from_numpy(batch).unsqueeze(1).to(self.device)
-
-        tensor = F.interpolate(
-            tensor,
-            size=(self.image_size, self.image_size),
-            mode="bilinear",
-            align_corners=False
-        )
+        predictions = []
 
         with torch.inference_mode():
-            logits = self.model(tensor)
-            probabilities = torch.sigmoid(logits)
+            for item in slices:
+                height, width = item.shape
 
-            predictions = []
+                batch = np.asarray(
+                    item, dtype=np.float32
+                )[None, None, :, :]
 
-            for index, (height, width) in enumerate(original_shapes):
+                tensor = torch.from_numpy(batch)
+
+                tensor = F.interpolate(
+                    tensor,
+                    size=(self.image_size, self.image_size),
+                    mode="bilinear",
+                    align_corners=False
+                )
+
+                logits = self.model(tensor)
+                probabilities = torch.sigmoid(logits)
+
                 restored = F.interpolate(
-                    probabilities[index:index + 1],
+                    probabilities,
                     size=(height, width),
                     mode="bilinear",
                     align_corners=False
                 )
 
-                mask = (restored[0, 0] >= self.threshold)
-                predictions.append(
-                    mask.to(torch.uint8).cpu().numpy()
-                )
+                mask = (
+                    restored[0, 0] >= self.threshold
+                ).to(torch.uint8).numpy()
+
+                predictions.append(mask)
+
+                del tensor, logits, probabilities, restored
 
         return predictions
