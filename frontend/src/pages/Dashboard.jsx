@@ -1,124 +1,88 @@
-import { Activity, FileCheck2, ScanLine, Users } from "lucide-react";
+import { ArrowRight, UploadCloud } from 'lucide-react';
+import ScanViewer from '../components/ScanViewer.jsx';
+import AnalysisSummary from '../components/AnalysisSummary.jsx';
+import PatientAnalysis from '../components/PatientAnalysis.jsx';
+import { relativeTime } from '../store.js';
 
-import { Link } from "react-router-dom";
-
-import StatCard from "../components/StatCard";
-import StatusBadge from "../components/StatusBadge";
-import Workflow from "../components/Workflow";
-
-import { useApp } from "../context/AppContext";
-
-export default function Dashboard() {
-  const { studies, setSelectedStudy } = useApp();
-
-  const completed = studies.filter((s) => s.status === "Completed").length;
+export default function Dashboard({ entry, vols, health, history, navigate, openEntry }) {
+  const model = typeof health.data?.model === 'string' ? health.data.model : 'YOLOv8n-seg';
+  const recent = history.slice(0, 5);
 
   return (
-    <>
-      <div className="page-title">
-        <div>
-          <span className="eyebrow">OVERVIEW</span>
-          <h1>Dashboard</h1>
-          <p>Monitor research studies and model activity.</p>
-        </div>
-
-        <Link className="primary-link" to="/upload">
-          + New study
-        </Link>
+    <div className="page">
+      <div className="page-head">
+        <div className="mono eyebrow">Research workstation · Lung CT</div>
+        <h1>Lung Intelligence</h1>
+        <p className="lede">Advanced pulmonary imaging and AI-assisted analysis.</p>
       </div>
 
-      <div className="stat-grid">
-        <StatCard
-          label="Total studies"
-          value={studies.length}
-          detail="Available in workspace"
-          icon={ScanLine}
-        />
+      <div className="metrics mono" aria-label="Technical status">
+        <span><i>Backend</i><b className="cap">{health.state}</b>{health.latency != null ? ` · ${health.latency} ms` : ''}</span>
+        <span><i>Model</i>{model}</span>
+        <span><i>Input</i>NIfTI volume</span>
+        <span><i>Stored scans</i>{history.length}</span>
+        <span><i>Last analysis</i>{history[0] ? relativeTime(history[0].savedAt) : '—'}</span>
+      </div>
 
-        <StatCard
-          label="Completed"
-          value={completed}
-          detail="Demo records"
-          icon={FileCheck2}
-          tone="green"
+      <div className="dash-grid">
+        <ScanViewer
+          volume={vols?.volume}
+          mask={vols?.mask}
+          label={entry?.filename}
+          empty={{
+            title: entry ? 'Volume not retained in this session' : 'No volume loaded',
+            text: entry
+              ? 'Scan records are kept on this device, but the volume itself is not stored. Upload the file again to view its slices.'
+              : 'Upload a .nii or .nii.gz lung CT volume. Slices are decoded in your browser from your own file, so what you see is the real scan.',
+            action: (
+              <button type="button" className="btn btn-primary" onClick={() => navigate('upload')}>
+                <UploadCloud size={16} /> New analysis
+              </button>
+            ),
+          }}
         />
-
-        <StatCard
-          label="Needs review"
-          value={studies.filter((s) => s.status === "Review").length}
-          detail="Human review required"
-          icon={Users}
-          tone="orange"
-        />
-
-        <StatCard
-          label="Model pipeline"
-          value="Ready"
-          detail="Demo workflow"
-          icon={Activity}
-          tone="purple"
+        <AnalysisSummary
+          record={entry?.record}
+          status={entry ? 'complete' : 'idle'}
+          elapsedMs={entry?.elapsedMs}
+          maskState={vols?.maskState}
         />
       </div>
 
-      <section className="panel">
-        <div className="section-heading">
-          <div>
-            <h2>Recent studies</h2>
-            <p>Example records for interface testing</p>
+      <div className="dash-lower">
+        <PatientAnalysis entry={entry} volume={vols?.volume} readOnly />
+
+        <aside className="panel recent" aria-label="Recent scans">
+          <div className="panel-head">
+            <div>
+              <div className="mono eyebrow">Activity</div>
+              <h2>Recent scans</h2>
+            </div>
           </div>
-
-          <Link to="/history">View history →</Link>
-        </div>
-
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Study</th>
-                <th>Modality</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Model output</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {studies.slice(0, 5).map((s) => (
-                <tr key={s.id} onClick={() => setSelectedStudy(s)}>
-                  <td>
-                    <b>{s.name}</b>
-                    <small>{s.id}</small>
-                  </td>
-
-                  <td>{s.modality}</td>
-                  <td>{s.date}</td>
-
-                  <td>
-                    <StatusBadge status={s.status} />
-                  </td>
-
-                  <td>
-                    {s.confidence == null
-                      ? "—"
-                      : `${Math.round(s.confidence * 100)}% illustrative score`}
-                  </td>
-                </tr>
+          {recent.length === 0 ? (
+            <p className="muted pad">No scans yet. Completed analyses are listed here.</p>
+          ) : (
+            <ul className="recent-list">
+              {recent.map((e) => (
+                <li key={e.id}>
+                  <button type="button" onClick={() => openEntry(e.id)}>
+                    <span className="r-main">
+                      <span className="r-name">{e.filename}</span>
+                      <span className="mono r-meta">
+                        {relativeTime(e.savedAt)} · {e.record.count != null ? `${e.record.count} candidate${e.record.count === 1 ? '' : 's'}` : 'count not reported'}
+                      </span>
+                    </span>
+                    <ArrowRight size={15} />
+                  </button>
+                </li>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="panel">
-        <div className="section-heading">
-          <div>
-            <h2>Analysis workflow</h2>
-            <p>Typical research pipeline</p>
-          </div>
-        </div>
-
-        <Workflow current={4} />
-      </section>
-    </>
+            </ul>
+          )}
+          {history.length > 0 && (
+            <button type="button" className="link-btn" onClick={() => navigate('history')}>View all scans</button>
+          )}
+        </aside>
+      </div>
+    </div>
   );
 }

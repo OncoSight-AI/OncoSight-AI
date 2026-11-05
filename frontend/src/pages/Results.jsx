@@ -1,84 +1,64 @@
-import StatusBadge from "../components/StatusBadge";
-import MetricCard from "../components/MetricCard";
+import { Download, UploadCloud } from 'lucide-react';
+import ScanViewer from '../components/ScanViewer.jsx';
+import AnalysisSummary from '../components/AnalysisSummary.jsx';
+import PatientAnalysis from '../components/PatientAnalysis.jsx';
+import { maskUrl } from '../api.js';
 
-import { useApp } from "../context/AppContext";
-import { printReport } from "../utils/pdfGenerator";
+export default function Results({ entry, vols, navigate, onNotes }) {
+  if (!entry) {
+    return (
+      <div className="page">
+        <div className="page-head">
+          <div className="mono eyebrow">Analysis report</div>
+          <h1>No report to show</h1>
+          <p className="lede">Run an analysis or open a scan from your history to see its report.</p>
+        </div>
+        <div className="actions">
+          <button type="button" className="btn btn-primary" onClick={() => navigate('upload')}><UploadCloud size={16} /> New analysis</button>
+          <button type="button" className="btn btn-ghost" onClick={() => navigate('history')}>Scan history</button>
+        </div>
+      </div>
+    );
+  }
 
-export default function Results() {
-  const { selectedStudy } = useApp();
-  const s = selectedStudy;
+  const { record } = entry;
+  const raw = record.raw === undefined ? null : JSON.stringify(record.raw, null, 2);
 
   return (
-    <>
-      <div className="page-title">
+    <div className="page">
+      <div className="page-head row">
         <div>
-          <span className="eyebrow">ANALYSIS OUTPUT</span>
-          <h1>Results</h1>
-          <p>Review the selected study output.</p>
+          <div className="mono eyebrow">Analysis report</div>
+          <h1>{entry.filename}</h1>
+          <p className="lede mono">{new Date(entry.savedAt).toLocaleString()}</p>
         </div>
-
-        {s && (
-          <button className="secondary" onClick={() => printReport(s)}>
-            Export report
-          </button>
+        {record.scanId != null && (
+          <a className="btn btn-ghost" href={maskUrl(record.scanId)} download>
+            <Download size={15} /> Download mask
+          </a>
         )}
       </div>
 
-      {!s ? (
-        <div className="panel">
-          No study selected. Upload or select a study first.
-        </div>
-      ) : (
-        <>
-          <section className="panel">
-            <div className="section-heading">
-              <div>
-                <h2>{s.name}</h2>
-                <p>
-                  {s.id} · {s.modality} · {s.date}
-                </p>
-              </div>
+      <div className="dash-grid">
+        <ScanViewer
+          volume={vols?.volume}
+          mask={vols?.mask}
+          label={entry.filename}
+          empty={{
+            title: 'Volume not retained',
+            text: 'This record was restored from local history. The report data is intact, but the CT volume is not stored, so no slices can be shown. Upload the file again to view it.',
+            action: <button type="button" className="btn btn-ghost" onClick={() => navigate('upload')}>Upload again</button>,
+          }}
+        />
+        <AnalysisSummary record={record} status="complete" elapsedMs={entry.elapsedMs} maskState={vols?.maskState} />
+      </div>
 
-              <StatusBadge status={s.status} />
-            </div>
+      <PatientAnalysis entry={entry} volume={vols?.volume} onNotes={onNotes} />
 
-            <div className="metric-grid">
-              <MetricCard
-                label="Illustrative score"
-                value={
-                  s.confidence == null
-                    ? "—"
-                    : `${Math.round(s.confidence * 100)}%`
-                }
-                description="Demo value, not a clinical probability"
-              />
-
-              <MetricCard
-                label="Model"
-                value={s.model}
-                description="Configured research pipeline"
-              />
-
-              <MetricCard
-                label="Output status"
-                value={s.status}
-                description="Requires appropriate review"
-              />
-            </div>
-
-            <div className="result-summary">
-              <h3>Model summary</h3>
-              <p>{s.finding}</p>
-              <small>{s.notes}</small>
-            </div>
-          </section>
-
-          <div className="notice">
-            AI-generated outputs can be wrong or biased. Do not use this page to
-            make diagnosis or treatment decisions.
-          </div>
-        </>
-      )}
-    </>
+      <details className="panel raw">
+        <summary className="mono">Backend response (raw)</summary>
+        {raw ? <pre>{raw}</pre> : <p className="muted pad">The raw payload was dropped from this older record to save browser storage.</p>}
+      </details>
+    </div>
   );
 }
