@@ -118,9 +118,8 @@ def health():
     return {
         "status": "healthy" if pipeline else "model_not_loaded",
         "model_loaded": pipeline is not None,
-        "device": str(pipeline.model.device) if pipeline else None
+        "model": "U-Net"
     }
-
 
 @app.post("/predict-volume")
 async def predict_volume(file: UploadFile = File(...)):
