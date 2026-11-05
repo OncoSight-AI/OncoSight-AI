@@ -9,7 +9,7 @@ class YOLOSegmentationService:
         model_path,
         confidence=0.25,
         image_size=512,
-        device=0
+        device='cpu'
     ):
 
         self.model = YOLO(str(model_path))
