@@ -1,4 +1,6 @@
+
 import numpy as np
+import cv2
 from ultralytics import YOLO
 
 
@@ -42,6 +44,15 @@ class YOLOSegmentationService:
 
             detections = []
 
+            # Extract actual confidence scores from YOLO
+            if result.boxes is not None and len(result.boxes) > 0:
+                confidence_scores = (
+                    result.boxes.conf.cpu().numpy()
+                )
+            else:
+                confidence_scores = np.array([])
+
+            # Process segmentation masks
             if result.masks is not None:
 
                 masks = result.masks.data.cpu().numpy()
@@ -53,7 +64,6 @@ class YOLOSegmentationService:
                     ).astype(np.uint8)
 
                     if mask.shape != (height, width):
-                        import cv2
 
                         mask = cv2.resize(
                             mask,
@@ -66,15 +76,49 @@ class YOLOSegmentationService:
                         mask
                     )
 
+                    # Match the mask with its YOLO detection score
+                    confidence_score = (
+                        float(confidence_scores[index])
+                        if index < len(confidence_scores)
+                        else None
+                    )
+
                     detections.append({
                         "detection_number": index + 1,
-                        "segmented_pixels": int(mask.sum())
+                        "segmented_pixels": int(mask.sum()),
+                        "confidence": confidence_score,
+                        "confidence_percent": (
+                            round(confidence_score * 100, 2)
+                            if confidence_score is not None
+                            else None
+                        )
                     })
+
+            # Calculate confidence statistics for this slice
+            valid_scores = [
+                item["confidence"]
+                for item in detections
+                if item["confidence"] is not None
+            ]
+
+            average_confidence = (
+                float(np.mean(valid_scores))
+                if valid_scores
+                else None
+            )
+
+            highest_confidence = (
+                float(np.max(valid_scores))
+                if valid_scores
+                else None
+            )
 
             predictions.append({
                 "mask": combined_mask,
                 "detections": detections,
-                "detection_count": len(detections)
+                "detection_count": len(detections),
+                "average_confidence": average_confidence,
+                "highest_confidence": highest_confidence
             })
 
         return predictions

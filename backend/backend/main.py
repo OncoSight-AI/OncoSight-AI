@@ -1,6 +1,5 @@
-﻿import os
-import hashlib
-import urllib.request
+﻿
+import os
 from pathlib import Path
 from threading import Lock
 
@@ -13,17 +12,11 @@ from services.prediction_pipeline import PredictionPipeline
 
 BASE_DIR = Path(__file__).resolve().parent
 
-MODEL_URL = os.getenv("MODEL_URL", "").strip()
-
 MODEL_PATH = Path(
     os.getenv(
-        "MODEL_PATH",
-        str(BASE_DIR / "models" / "best_lung_unet_weighted.pth")
+        "YOLO_MODEL_PATH",
+        r"D:\OncoSightData\yolo_runs\lung_nodule_yolov8n_seg\weights\best.pt"
     )
-)
-
-EXPECTED_SHA256 = (
-    "e5ac0f41fbabe9eca37ad8134df59a1a1f264de749abb032022c68b31f63a8ce"
 )
 
 OUTPUT_DIR = BASE_DIR / "outputs"
@@ -33,44 +26,10 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def download_model():
-    if MODEL_PATH.exists():
-        return
-
-    if not MODEL_URL:
-        raise RuntimeError("MODEL_URL environment variable is missing.")
-
-    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-    temporary_model = MODEL_PATH.with_suffix(".download")
-
-    print("Downloading trained U-Net model...")
-
-    try:
-        urllib.request.urlretrieve(MODEL_URL, temporary_model)
-
-        sha256 = hashlib.sha256()
-
-        with temporary_model.open("rb") as model_file:
-            for chunk in iter(lambda: model_file.read(1024 * 1024), b""):
-                sha256.update(chunk)
-
-        if sha256.hexdigest() != EXPECTED_SHA256:
-            raise RuntimeError("Model SHA256 checksum verification failed.")
-
-        temporary_model.replace(MODEL_PATH)
-
-        print("U-Net model downloaded and verified successfully.")
-
-    finally:
-        if temporary_model.exists():
-            temporary_model.unlink()
-
-
 app = FastAPI(
     title="OncoSight AI Backend",
-    description="Research prototype for lung CT segmentation using U-Net.",
-    version="2.0.0"
+    description="Research prototype for lung nodule segmentation using YOLO.",
+    version="3.0.0"
 )
 
 app.add_middleware(
@@ -93,14 +52,21 @@ inference_lock = Lock()
 def load_model():
     global pipeline
 
-    download_model()
+    if os.getenv("SKIP_MODEL_LOAD", "").lower() in ("1", "true", "yes"):
+        print("OncoSight AI started in demo mode. Model loading skipped.")
+        return
+
+    if not MODEL_PATH.is_file():
+        raise FileNotFoundError(
+            f"YOLO model checkpoint not found: {MODEL_PATH}"
+        )
 
     pipeline = PredictionPipeline(
         model_path=MODEL_PATH,
         output_dir=OUTPUT_DIR
     )
 
-    print("OncoSight AI U-Net backend is ready.")
+    print("OncoSight AI YOLO segmentation backend is ready.")
 
 
 @app.get("/")
@@ -108,8 +74,8 @@ def root():
     return {
         "project": "OncoSight AI",
         "status": "running",
-        "model": "U-Net",
-        "purpose": "Lung CT segmentation research prototype"
+        "model": "YOLOv8n-seg",
+        "purpose": "Lung nodule segmentation research prototype"
     }
 
 
@@ -118,8 +84,9 @@ def health():
     return {
         "status": "healthy" if pipeline else "model_not_loaded",
         "model_loaded": pipeline is not None,
-        "model": "U-Net"
+        "model": "YOLOv8n-seg"
     }
+
 
 @app.post("/predict-volume")
 async def predict_volume(file: UploadFile = File(...)):
@@ -177,7 +144,7 @@ async def predict_volume(file: UploadFile = File(...)):
 
         return {
             "success": True,
-            "message": "CT segmentation completed.",
+            "message": "Lung nodule segmentation completed.",
             "prediction": result
         }
 
