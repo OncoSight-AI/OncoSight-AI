@@ -2548,3 +2548,142 @@ main {
 .home-dashboard .home-recent-item:hover {
   border-color: rgba(161, 139, 82, 0.4);
 }
+
+
+.vw-stage {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+}
+
+.vw-layer {
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.vw-layer .vw-canvas {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+
+/* Large, readable CT viewer */
+.vw-stage {
+  position: relative;
+  width: 100%;
+  min-height: clamp(520px, 72vh, 850px);
+  overflow: hidden;
+}
+
+.vw-layer {
+  overflow: hidden;
+}
+
+.vw-canvas {
+  object-fit: contain !important;
+  image-rendering: auto;
+}
+
+.vw-stage canvas {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media (max-width: 768px) {
+  .vw-stage {
+    min-height: 440px;
+  }
+}
+
+/* Large, readable CT viewer */
+.vw-stage {
+  position: relative;
+  width: 100%;
+  min-height: clamp(520px, 72vh, 850px);
+  overflow: hidden;
+}
+
+.vw-layer {
+  overflow: hidden;
+}
+
+.vw-canvas {
+  object-fit: contain !important;
+  image-rendering: auto;
+}
+
+.vw-stage canvas {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media (max-width: 768px) {
+  .vw-stage {
+    min-height: 440px;
+  }
+}
+
+
+/* =========================================================
+   OncoSight AI — Large CT image viewer
+   ========================================================= */
+
+.vw-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(580px, 78vh, 900px);
+  min-height: 580px;
+  overflow: hidden;
+  background: #050706;
+  isolation: isolate;
+}
+
+.vw-layer {
+  overflow: hidden;
+}
+
+.vw-image-stack {
+  overflow: hidden;
+}
+
+.vw-image-stack canvas {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.vw-canvas {
+  image-rendering: auto;
+}
+
+.vw-mask {
+  pointer-events: none;
+}
+
+.viewer:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background: #090b09;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.viewer:fullscreen .vw-stage {
+  height: calc(100vh - 160px);
+  min-height: 500px;
+}
+
+@media (max-width: 768px) {
+  .vw-stage {
+    height: 65vh;
+    min-height: 440px;
+  }
+
+  .viewer:fullscreen .vw-stage {
+    height: calc(100vh - 180px);
+    min-height: 400px;
+  }
+}

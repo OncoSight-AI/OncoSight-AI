@@ -19,7 +19,6 @@ class PredictionPipeline:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Use NVIDIA GPU when available.
         device = 0 if torch.cuda.is_available() else "cpu"
 
         self.model = YOLOSegmentationService(
@@ -38,9 +37,11 @@ class PredictionPipeline:
 
         volume, affine, header, metadata = load_nifti(input_path)
 
-        slice_axis = metadata["slice_axis"]
+        slice_axis = int(metadata["slice_axis"])
 
-        # Preprocess CT volume.
+        if slice_axis not in (0, 1, 2):
+            raise ValueError("Invalid CT slice axis.")
+
         slices = preprocess_volume(volume, slice_axis)
 
         predicted_slices = []
@@ -54,7 +55,6 @@ class PredictionPipeline:
 
             batch = slices[start:start + batch_size]
 
-            # Convert normalized grayscale slices to uint8 RGB.
             yolo_batch = []
 
             for ct_slice in batch:
@@ -92,12 +92,21 @@ class PredictionPipeline:
                     confidence = detection.get("confidence")
 
                     detection_info = {
-                        "slice_index": slice_index,
-                        "detection_number": detection["detection_number"],
-                        "segmented_pixels": detection["segmented_pixels"],
-                        "confidence": confidence,
+                        "slice_index": int(slice_index),
+                        "slice_axis": slice_axis,
+                        "detection_number": int(
+                            detection["detection_number"]
+                        ),
+                        "segmented_pixels": int(
+                            detection["segmented_pixels"]
+                        ),
+                        "confidence": (
+                            float(confidence)
+                            if confidence is not None
+                            else None
+                        ),
                         "confidence_percent": (
-                            round(confidence * 100, 2)
+                            round(float(confidence) * 100, 2)
                             if confidence is not None
                             else None
                         )
@@ -107,8 +116,9 @@ class PredictionPipeline:
                     all_detections.append(detection_info)
 
                 per_slice_details.append({
-                    "slice_index": slice_index,
-                    "detection_count": detection_count,
+                    "slice_index": int(slice_index),
+                    "slice_axis": slice_axis,
+                    "detection_count": int(detection_count),
                     "average_confidence": prediction.get(
                         "average_confidence"
                     ),
@@ -118,7 +128,6 @@ class PredictionPipeline:
                     "detections": slice_detections
                 })
 
-        # Reconstruct 2D predictions into the original 3D volume.
         mask = reconstruct_volume(
             predicted_slices,
             volume.shape,
@@ -140,7 +149,6 @@ class PredictionPipeline:
 
         total_detections = sum(per_slice_detections)
 
-        # Calculate statistics using actual YOLO confidence scores.
         valid_confidences = [
             item["confidence"]
             for item in all_detections
@@ -159,10 +167,33 @@ class PredictionPipeline:
             else None
         )
 
+        best_detection = (
+            max(
+                (
+                    item for item in all_detections
+                    if item["confidence"] is not None
+                ),
+                key=lambda item: item["confidence"],
+                default=None
+            )
+        )
+
+        if best_detection is None and all_detections:
+            best_detection = all_detections[0]
+
+        best_detection_slice = (
+            best_detection["slice_index"]
+            if best_detection is not None
+            else None
+        )
+
         return {
             "scan_id": scan_id,
             "model": "YOLOv8n-seg (lung_nodule)",
             "detection_class": "lung_nodule",
+
+            "slice_axis": slice_axis,
+            "best_detection_slice": best_detection_slice,
 
             "total_slices": len(slices),
             "slices_with_segmentation": slices_with_segmentation,

@@ -1,6 +1,7 @@
 
 // Minimal in-browser NIfTI-1 reader (.nii / .nii.gz).
-// Displays the real CT volume and its actual segmentation mask.
+// Supports displaying matching CT and segmentation planes
+// along voxel axes 0, 1 and 2.
 
 const TYPES = {
   2: [Uint8Array, 1],
@@ -22,7 +23,7 @@ export const WINDOW_PRESETS = {
 async function gunzip(buf) {
   if (typeof DecompressionStream === 'undefined') {
     throw new Error(
-      'This browser cannot decompress .nii.gz files. Use a current Chrome, Edge, Firefox or Safari.'
+      'This browser cannot decompress .nii.gz files. Use a current browser.'
     );
   }
 
@@ -165,7 +166,6 @@ export async function readNiftiBuffer(input) {
     if (v > max) max = v;
   }
 
-  // 1st and 99th percentile from a strided sample.
   const step = Math.max(1, Math.floor(n / 100000));
   const sample = [];
 
@@ -204,6 +204,59 @@ export function sameGrid(a, b) {
     a.nz === b.nz;
 }
 
+export function sliceCountForAxis(vol, axis = 2) {
+  if (!vol || axis < 0 || axis > 2) return 0;
+
+  return [vol.nx, vol.ny, vol.nz][axis];
+}
+
+function planeDimensions(vol, axis) {
+  if (axis === 0) {
+    return {
+      width: vol.ny,
+      height: vol.nz,
+    };
+  }
+
+  if (axis === 1) {
+    return {
+      width: vol.nx,
+      height: vol.nz,
+    };
+  }
+
+  return {
+    width: vol.nx,
+    height: vol.ny,
+  };
+}
+
+// Convert displayed plane coordinates into the original
+// NIfTI linear voxel index.
+function voxelIndex(vol, axis, slice, u, v) {
+  const { nx, ny, nz } = vol;
+
+  let x;
+  let y;
+  let z;
+
+  if (axis === 0) {
+    x = slice;
+    y = u;
+    z = nz - 1 - v;
+  } else if (axis === 1) {
+    x = u;
+    y = slice;
+    z = nz - 1 - v;
+  } else {
+    x = u;
+    y = ny - 1 - v;
+    z = slice;
+  }
+
+  return x + nx * (y + ny * z);
+}
+
 export function windowFor(vol, preset) {
   if (preset === 'auto' || !WINDOW_PRESETS[preset]) {
     let lo = vol.p1;
@@ -234,39 +287,50 @@ export function windowFor(vol, preset) {
   };
 }
 
-/** Draw an axial CT slice into a canvas. */
-export function drawSlice(canvas, vol, z, lo, hi) {
-  const { nx, ny, data } = vol;
+/**
+ * Draw a CT plane using the requested voxel axis.
+ * The canvas intrinsic dimensions remain the actual
+ * plane dimensions, not CSS display dimensions.
+ */
+export function drawSlice(
+  canvas,
+  vol,
+  slice,
+  lo,
+  hi,
+  axis = 2
+) {
+  const { width, height } = planeDimensions(vol, axis);
+  const count = sliceCountForAxis(vol, axis);
 
-  canvas.width = nx;
-  canvas.height = ny;
+  canvas.width = width;
+  canvas.height = height;
 
   const ctx = canvas.getContext('2d');
-  const img = ctx.createImageData(nx, ny);
-  const px = img.data;
+  if (!ctx) return;
 
-  const base = z * nx * ny;
+  const img = ctx.createImageData(width, height);
+  const px = img.data;
   const scale = 255 / (hi - lo || 1);
 
-  for (let j = 0; j < ny; j++) {
-    const dstRow = (ny - 1 - j) * nx;
-    const srcRow = base + j * nx;
+  if (slice < 0 || slice >= count) {
+    ctx.putImageData(img, 0, 0);
+    return;
+  }
 
-    for (let i = 0; i < nx; i++) {
-      let g = (data[srcRow + i] - lo) * scale;
+  for (let v = 0; v < height; v++) {
+    for (let u = 0; u < width; u++) {
+      const index = voxelIndex(vol, axis, slice, u, v);
 
-      g = g < 0
-        ? 0
-        : g > 255
-          ? 255
-          : g;
+      let g = (vol.data[index] - lo) * scale;
+      g = Math.max(0, Math.min(255, g));
 
-      const o = (dstRow + i) * 4;
+      const offset = (v * width + u) * 4;
 
-      px[o] = g;
-      px[o + 1] = g;
-      px[o + 2] = g;
-      px[o + 3] = 255;
+      px[offset] = g;
+      px[offset + 1] = g;
+      px[offset + 2] = g;
+      px[offset + 3] = 255;
     }
   }
 
@@ -274,37 +338,136 @@ export function drawSlice(canvas, vol, z, lo, hi) {
 }
 
 /**
- * Draw non-zero segmentation voxels in translucent red.
- * Only actual mask pixels are highlighted.
+ * Draw the actual matching segmentation plane.
+ * A red square encloses all non-zero mask pixels.
  */
-export function drawMask(canvas, mask, z) {
-  const { nx, ny, data } = mask;
+export function drawMask(
+  canvas,
+  mask,
+  slice,
+  axis = 2
+) {
+  const { width, height } = planeDimensions(mask, axis);
+  const count = sliceCountForAxis(mask, axis);
 
-  canvas.width = nx;
-  canvas.height = ny;
+  canvas.width = width;
+  canvas.height = height;
 
   const ctx = canvas.getContext('2d');
-  const img = ctx.createImageData(nx, ny);
+  if (!ctx) return;
+
+  const img = ctx.createImageData(width, height);
   const px = img.data;
 
-  const base = z * nx * ny;
+  if (slice < 0 || slice >= count) {
+    ctx.putImageData(img, 0, 0);
+    return;
+  }
 
-  for (let j = 0; j < ny; j++) {
-    const dstRow = (ny - 1 - j) * nx;
-    const srcRow = base + j * nx;
+  let minX = width;
+  let minY = height;
+  let maxX = -1;
+  let maxY = -1;
 
-    for (let i = 0; i < nx; i++) {
-      if (data[srcRow + i] > 0) {
-        const o = (dstRow + i) * 4;
+  for (let v = 0; v < height; v++) {
+    for (let u = 0; u < width; u++) {
+      const index = voxelIndex(mask, axis, slice, u, v);
 
-        // Red segmentation overlay
-        px[o] = 255;
-        px[o + 1] = 45;
-        px[o + 2] = 45;
-        px[o + 3] = 155;
+      if (mask.data[index] > 0) {
+        const offset = (v * width + u) * 4;
+
+        px[offset] = 255;
+        px[offset + 1] = 35;
+        px[offset + 2] = 35;
+        px[offset + 3] = 170;
+
+        minX = Math.min(minX, u);
+        minY = Math.min(minY, v);
+        maxX = Math.max(maxX, u);
+        maxY = Math.max(maxY, v);
       }
     }
   }
 
   ctx.putImageData(img, 0, 0);
+
+  if (maxX < 0) return;
+
+  const boxWidth = maxX - minX + 1;
+  const boxHeight = maxY - minY + 1;
+  const side = Math.max(boxWidth, boxHeight) + 12;
+
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+
+  const boxX = centerX - side / 2;
+  const boxY = centerY - side / 2;
+
+  ctx.save();
+
+  ctx.strokeStyle = '#ff2020';
+  ctx.lineWidth = Math.max(2, width / 250);
+  ctx.shadowColor = '#ff0000';
+  ctx.shadowBlur = 5;
+
+  ctx.strokeRect(boxX, boxY, side, side);
+
+  ctx.restore();
+
+  const fontSize = Math.max(9, Math.min(13, width / 45));
+  const label = 'POSSIBLE NODULE DETECTED';
+
+  ctx.save();
+
+  ctx.font = `bold ${fontSize}px Arial`;
+
+  const paddingX = 5;
+  const labelWidth =
+    ctx.measureText(label).width + paddingX * 2;
+  const labelHeight = fontSize + 6;
+
+  const labelX = Math.max(
+    0,
+    Math.min(width - labelWidth, boxX)
+  );
+
+  let labelY = boxY - labelHeight - 4;
+
+  if (labelY < 0) {
+    labelY = Math.min(
+      height - labelHeight,
+      boxY + side + 4
+    );
+  }
+
+  labelY = Math.max(0, labelY);
+
+  ctx.fillStyle = 'rgba(35, 5, 5, 0.94)';
+  ctx.fillRect(
+    labelX,
+    labelY,
+    labelWidth,
+    labelHeight
+  );
+
+  ctx.strokeStyle = '#ff2020';
+  ctx.lineWidth = 1;
+
+  ctx.strokeRect(
+    labelX,
+    labelY,
+    labelWidth,
+    labelHeight
+  );
+
+  ctx.fillStyle = '#ff5555';
+  ctx.textBaseline = 'middle';
+
+  ctx.fillText(
+    label,
+    labelX + paddingX,
+    labelY + labelHeight / 2
+  );
+
+  ctx.restore();
 }

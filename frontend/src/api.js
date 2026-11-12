@@ -159,10 +159,6 @@ export async function fetchMask(scanId) {
   return res.arrayBuffer();
 }
 
-// ------------------------------------------------------
-// Response normalization
-// ------------------------------------------------------
-
 const COUNT_KEYS = [
   'nodule_count',
   'num_nodules',
@@ -269,7 +265,6 @@ export function normalizeResult(raw) {
     count = detections ? detections.length : null;
   }
 
-  // Read actual average confidence from the backend.
   const averagePercent = pick(payload, [
     'average_detection_confidence_percent',
   ]);
@@ -350,6 +345,22 @@ export function normalizeResult(raw) {
     'download_url',
   ]);
 
+  const sliceAxisRaw = payload.slice_axis;
+
+  const sliceAxis =
+    Number.isInteger(sliceAxisRaw) &&
+      sliceAxisRaw >= 0 &&
+      sliceAxisRaw <= 2
+      ? sliceAxisRaw
+      : 2;
+
+  const detectionSlices = (detections || [])
+    .map((d) => Number(d.slice_index ?? d.slice))
+    .filter(
+      (value) =>
+        Number.isInteger(value) && value >= 0
+    );
+
   return {
     raw,
     scanId,
@@ -376,6 +387,14 @@ export function normalizeResult(raw) {
       (confidence !== null),
 
     detections,
+    detectionSlices,
+
+    sliceAxis,
+
+    bestDetectionSlice:
+      Number.isInteger(payload.best_detection_slice)
+        ? payload.best_detection_slice
+        : null,
 
     slicesProcessed:
       Array.isArray(slicesRaw)
@@ -421,7 +440,10 @@ export function normalizeResult(raw) {
 }
 
 export function formatConfidence(value) {
-  if (typeof value !== 'number' || !Number.isFinite(value)) {
+  if (
+    typeof value !== 'number' ||
+    !Number.isFinite(value)
+  ) {
     return null;
   }
 
